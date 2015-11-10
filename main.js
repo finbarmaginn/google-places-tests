@@ -48,16 +48,20 @@ function setUpTextInputs() {
 
   });
 }
-function init() {
-
-  autocompleteService = new google.maps.places.AutocompleteService();
-
+function setUpMagicInputs() {
   var input = /** @type {!HTMLInputElement} */(
     document.getElementById('pac-input'));
+  var input2 = /** @type {!HTMLInputElement} */(
+    document.getElementById('pac-input2'));
 
   var options = {
     language: 'en-GB',
-    types: ['(regions)','geocode'],
+    types: ['geocode'],
+    componentRestrictions: {country: "uk"}
+  }
+  var options2 = {
+    language: 'en-GB',
+    types: ['(regions)'],
     componentRestrictions: {country: "uk"}
   }
 
@@ -68,8 +72,25 @@ function init() {
     var d = 2;
   });
 
-  setUpTextInputs();
 
+  var input = /** @type {!HTMLInputElement} */(
+    document.getElementById('pac-input'));
+
+  var options = {
+    language: 'en-GB',
+    types: ['(regions)', 'geocode'],
+    componentRestrictions: {country: "uk"}
+  }
+
+  var autocomplete2 = new google.maps.places.Autocomplete(input2, options);
+
+}
+function init() {
+
+  autocompleteService = new google.maps.places.AutocompleteService();
+  setUpMagicInputs();
+
+  setUpTextInputs();
 
 
 }
