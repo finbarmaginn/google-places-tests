@@ -27,6 +27,7 @@
 <h2>Using Autocomplete input</h2>
 <input id="pac-input" class="controls" type="text"
        placeholder="Enter a location">
+<div id="outputNoSvc"></div>
 
 
 <h2>Using Autocomplete service</h2>
@@ -35,7 +36,7 @@
 <form action="">
   <input type="radio" name="useRegions" value="noRegions" checked="checked">No
   <input type="radio" name="useRegions" value="regions">Yes
- <!-- <input type="radio" name="useRegions" value="merged">Merge both-->
+  <!-- <input type="radio" name="useRegions" value="merged">Merge both-->
 </form>
 
 <input id="svc-input" class="controls" type="text"
@@ -54,10 +55,17 @@
     var input = /** @type {!HTMLInputElement} */(
       document.getElementById('pac-input'));
 
-    var autocomplete = new google.maps.places.Autocomplete(input);
+    var options = {
+      language: 'en-GB',
+      componentRestrictions: {country: "uk"}
+    }
 
-    autocomplete.addListener('place_changed', function () {
+    var autocomplete = new google.maps.places.Autocomplete(input, options);
+
+
+    autocomplete.addListener('place_changed', function (d) {
       //code when input changed
+      var d = 2;
     });
 
     //_____________________________________________svc
