@@ -57,6 +57,7 @@ function init() {
 
   var options = {
     language: 'en-GB',
+    types: ['(regions)','geocode'],
     componentRestrictions: {country: "uk"}
   }
 
