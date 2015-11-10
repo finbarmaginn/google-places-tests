@@ -39,106 +39,17 @@
   <!-- <input type="radio" name="useRegions" value="merged">Merge both-->
 </form>
 
+<h4>getPlacePredictions api method, (some as postcode check)</h4>
 <input id="svc-input" class="controls" type="text"
        placeholder="Enter a location">
 
+<h4>getPredictions api method, (some as postcode check)</h4>
+<input id="svc-input-getPredictions" class="controls" type="text"
+       placeholder="Enter a location">
 
 <div id="output"></div>
 
-<script>
-  var autocompleteService;
-
-  function init() {
-
-    autocompleteService = new google.maps.places.AutocompleteService();
-
-    var input = /** @type {!HTMLInputElement} */(
-      document.getElementById('pac-input'));
-
-    var options = {
-      language: 'en-GB',
-      componentRestrictions: {country: "uk"}
-    }
-
-    var autocomplete = new google.maps.places.Autocomplete(input, options);
-
-
-    autocomplete.addListener('place_changed', function (d) {
-      //code when input changed
-      var d = 2;
-    });
-
-    //_____________________________________________svc
-
-    var input = /** @type {!HTMLInputElement} */(
-      document.getElementById('svc-input'));
-
-    input.addEventListener("keyup", function (e) {
-
-      var output = "";
-
-      var regionsOption = document.querySelector('input[name="useRegions"]:checked').value;
-
-      switch (regionsOption) {
-
-        case 'noRegions':
-          getAutocompleteServiceResults(input.value, false);
-          break;
-
-        case 'regions':
-          getAutocompleteServiceResults(input.value, true);
-          break;
-
-        case 'merged':
-          var noRegions = getAutocompleteServiceResults(inputMerged.value, false);
-          //bad code cause I want people to run without npm
-          setTimeout(function () {
-            var withRegions = getAutocompleteServiceResults(inputMerged.value, true);
-          }, 500)
-          break;
-
-        default:
-          break
-      }
-
-    });
-
-    /**
-     * Gets results array
-     * @param searchTerm
-     * @param useRegions
-     */
-    //todo wire out babel promise
-    function getAutocompleteServiceResults(searchTerm, useRegions) {
-      /*    var Promise = new Promise(function (resolve, reject) {
-
-       })*/
-      var types = useRegions ? '(regions)' : null;
-      autocompleteService.getPlacePredictions({
-          input: searchTerm,
-          componentRestrictions: {country: 'uk'},
-          types: types ? [types] : null,
-        }, function (newData) {
-          if (newData === null) {
-            console.log('No results for suggestions');
-          }
-
-          var output = newData.map(function (item) {
-            return item.description;
-          }).join("<br>");
-
-
-          //set the page for viewing the data from google
-          document.getElementById("output").innerHTML = '<pre>' + output + '</pre>';
-
-        }
-      );
-      //return Promise;
-    }
-  }
-
-
-</script>
+<script type="text/javascript" src="main.js"></script>
 <script src="https://maps.googleapis.com/maps/api/js?signed_in=true&libraries=places&callback=init"
         async defer></script>
 </body>
