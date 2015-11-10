@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Place Autocomplete</title>
+  <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+  <meta charset="utf-8">
+
+</head>
+
+<style type="text/css">
+
+  #pac-input {
+    background-color: #fff;
+    font-family: Roboto;
+    font-size: 15px;
+    font-weight: 300;
+    margin-left: 12px;
+    padding: 0 11px 0 13px;
+    text-overflow: ellipsis;
+    width: 300px;
+  }
+
+</style>
+
+<body>
+<input id="pac-input" class="controls" type="text"
+       placeholder="Enter a location">
+
+
+<script>
+  function init() {
+
+    var input = /** @type {!HTMLInputElement} */(
+      document.getElementById('pac-input'));
+
+
+    var autocomplete = new google.maps.places.Autocomplete(input);
+
+    autocomplete.addListener('place_changed', function () {
+      infowindow.close();
+      marker.setVisible(false);
+      var place = autocomplete.getPlace();
+      if (!place.geometry) {
+        window.alert("Autocomplete's returned place contains no geometry");
+        return;
+      }
+
+
+      var address = '';
+      if (place.address_components) {
+        address = [
+          (place.address_components[0] && place.address_components[0].short_name || ''),
+          (place.address_components[1] && place.address_components[1].short_name || ''),
+          (place.address_components[2] && place.address_components[2].short_name || '')
+        ].join(' ');
+      }
+
+    });
+
+
+  }
+
+
+</script>
+<script src="https://maps.googleapis.com/maps/api/js?signed_in=true&libraries=places&callback=init"
+        async defer></script>
+</body>
+</html>
