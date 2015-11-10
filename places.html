@@ -9,7 +9,7 @@
 
 <style type="text/css">
 
-  #pac-input {
+  input {
     background-color: #fff;
     font-family: Roboto;
     font-size: 15px;
@@ -23,16 +23,21 @@
 </style>
 
 <body>
+
+<h2>Using Autocomplete input</h2>
 <input id="pac-input" class="controls" type="text"
        placeholder="Enter a location">
 
+
+<h2>Using Autocomplete service</h2>
+<input id="svc-input" class="controls" type="text"
+       placeholder="Enter a location">
 
 <script>
   function init() {
 
     var input = /** @type {!HTMLInputElement} */(
       document.getElementById('pac-input'));
-
 
     var autocomplete = new google.maps.places.Autocomplete(input);
 
@@ -45,7 +50,6 @@
         return;
       }
 
-
       var address = '';
       if (place.address_components) {
         address = [
@@ -54,15 +58,38 @@
           (place.address_components[2] && place.address_components[2].short_name || '')
         ].join(' ');
       }
-
     });
+  }
 
+  //_____________________________________________svc
+
+  var input = /** @type {!HTMLInputElement} */(
+    document.getElementById('svc-input'));
+  input.addEventListener("keyup", function (e) {
+    getNewresults(input.value);
+  })
+
+  function getNewresults(searchTerm) {
+    autocompleteService = new google.maps.places.AutocompleteService();
+
+    autocompleteService.getPlacePredictions({
+      input: searchTerm,
+      componentRestrictions: {country: 'uk'},
+      types: ['(regions)']
+    }, function (data) {
+      if (data === null) {
+        console.log('No results for suggestions');
+      }
+      console.log(data.map(function (item) {
+        return item.description;
+      }));
+    });
 
   }
 
 
 </script>
-<script src="https://maps.googleapis.com/maps/api/js?signed_in=true&libraries=places&callback=init"
+<script src="https://maps.googleapis.com/maps/api/js?signed_in=true&libraries=places&callback=init&types=(regions)"
         async defer></script>
 </body>
 </html>
