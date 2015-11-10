@@ -9,7 +9,7 @@
 
 <style type="text/css">
 
-  input {
+  input[type="text"] {
     background-color: #fff;
     font-family: Roboto;
     font-size: 15px;
@@ -29,16 +29,27 @@
        placeholder="Enter a location">
 
 
-<h2>Using Autocomplete service with regions</h2>
+<h2>Using Autocomplete service</h2>
+
+<p>Use Regions?</p>
+<form action="">
+  <input type="radio" name="useRegions" value="noRegions" checked="checked">No
+  <input type="radio" name="useRegions" value="regions">Yes
+ <!-- <input type="radio" name="useRegions" value="merged">Merge both-->
+</form>
+
 <input id="svc-input" class="controls" type="text"
        placeholder="Enter a location">
 
-<h2>Using Autocomplete service without regions</h2>
-<input id="svc-inputNoRegions" class="controls" type="text"
-       placeholder="Enter a location">
+
+<div id="output"></div>
 
 <script>
+  var autocompleteService;
+
   function init() {
+
+    autocompleteService = new google.maps.places.AutocompleteService();
 
     var input = /** @type {!HTMLInputElement} */(
       document.getElementById('pac-input'));
@@ -46,70 +57,81 @@
     var autocomplete = new google.maps.places.Autocomplete(input);
 
     autocomplete.addListener('place_changed', function () {
-      infowindow.close();
-      marker.setVisible(false);
-      var place = autocomplete.getPlace();
-      if (!place.geometry) {
-        window.alert("Autocomplete's returned place contains no geometry");
-        return;
-      }
-
-      var address = '';
-      if (place.address_components) {
-        address = [
-          (place.address_components[0] && place.address_components[0].short_name || ''),
-          (place.address_components[1] && place.address_components[1].short_name || ''),
-          (place.address_components[2] && place.address_components[2].short_name || '')
-        ].join(' ');
-      }
+      //code when input changed
     });
-  }
 
-  //_____________________________________________svc
+    //_____________________________________________svc
 
-  var input = /** @type {!HTMLInputElement} */(
-    document.getElementById('svc-input'));
-  input.addEventListener("keyup", function (e) {
-    getAutocompleteServiceResults(input.value, true);
-  })
-  var inputNoRegions = /** @type {!HTMLInputElement} */(
-    document.getElementById('svc-inputNoRegions'));
-  input.addEventListener("keyup", function (e) {
-    getAutocompleteServiceResults(input.value, false);
-  })
+    var input = /** @type {!HTMLInputElement} */(
+      document.getElementById('svc-input'));
 
-  /**
-   * Gets results array
-   * @param searchTerm
-   * @param useRegions
-   * @returns {array|null}
-   */
-  function getAutocompleteServiceResults(searchTerm, useRegions) {
-    var types = useRegions ? '(regions)' : '',
-      data = null;
+    input.addEventListener("keyup", function (e) {
 
-    var autocompleteService = new google.maps.places.AutocompleteService();
+      var output = "";
 
-    autocompleteService.getPlacePredictions({
-        input: searchTerm,
-        componentRestrictions: {country: 'uk'},
-        types: [types]
-      }, function (newData) {
-        if (newData === null) {
-          console.log('No results for suggestions');
-        }
-        console.log(newData.map(function (item) {
-          return item.description;
-        }));
-        data = newData;
+      var regionsOption = document.querySelector('input[name="useRegions"]:checked').value;
+
+      switch (regionsOption) {
+
+        case 'noRegions':
+          getAutocompleteServiceResults(input.value, false);
+          break;
+
+        case 'regions':
+          getAutocompleteServiceResults(input.value, true);
+          break;
+
+        case 'merged':
+          var noRegions = getAutocompleteServiceResults(inputMerged.value, false);
+          //bad code cause I want people to run without npm
+          setTimeout(function () {
+            var withRegions = getAutocompleteServiceResults(inputMerged.value, true);
+          }, 500)
+          break;
+
+        default:
+          break
       }
-    );
-    return data;
+
+    });
+
+    /**
+     * Gets results array
+     * @param searchTerm
+     * @param useRegions
+     */
+    //todo wire out babel promise
+    function getAutocompleteServiceResults(searchTerm, useRegions) {
+      /*    var Promise = new Promise(function (resolve, reject) {
+
+       })*/
+      var types = useRegions ? '(regions)' : null;
+      autocompleteService.getPlacePredictions({
+          input: searchTerm,
+          componentRestrictions: {country: 'uk'},
+          types: types ? [types] : null,
+        }, function (newData) {
+          if (newData === null) {
+            console.log('No results for suggestions');
+          }
+
+          var output = newData.map(function (item) {
+            return item.description;
+          }).join("<br>");
+
+
+          //set the page for viewing the data from google
+          document.getElementById("output").innerHTML = '<pre>' + output + '</pre>';
+
+        }
+      );
+      //return Promise;
+    }
   }
 
 
 </script>
-<script src="https://maps.googleapis.com/maps/api/js?signed_in=true&libraries=places&callback=init&types=(regions)"
+<script src="https://maps.googleapis.com/maps/api/js?signed_in=true&libraries=places&callback=init"
         async defer></script>
 </body>
 </html>
