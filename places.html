@@ -29,8 +29,12 @@
        placeholder="Enter a location">
 
 
-<h2>Using Autocomplete service</h2>
+<h2>Using Autocomplete service with regions</h2>
 <input id="svc-input" class="controls" type="text"
+       placeholder="Enter a location">
+
+<h2>Using Autocomplete service without regions</h2>
+<input id="svc-inputNoRegions" class="controls" type="text"
        placeholder="Enter a location">
 
 <script>
@@ -66,25 +70,41 @@
   var input = /** @type {!HTMLInputElement} */(
     document.getElementById('svc-input'));
   input.addEventListener("keyup", function (e) {
-    getNewresults(input.value);
+    getAutocompleteServiceResults(input.value, true);
+  })
+  var inputNoRegions = /** @type {!HTMLInputElement} */(
+    document.getElementById('svc-inputNoRegions'));
+  input.addEventListener("keyup", function (e) {
+    getAutocompleteServiceResults(input.value, false);
   })
 
-  function getNewresults(searchTerm) {
-    autocompleteService = new google.maps.places.AutocompleteService();
+  /**
+   * Gets results array
+   * @param searchTerm
+   * @param useRegions
+   * @returns {array|null}
+   */
+  function getAutocompleteServiceResults(searchTerm, useRegions) {
+    var types = useRegions ? '(regions)' : '',
+      data = null;
+
+    var autocompleteService = new google.maps.places.AutocompleteService();
 
     autocompleteService.getPlacePredictions({
-      input: searchTerm,
-      componentRestrictions: {country: 'uk'},
-      types: ['(regions)']
-    }, function (data) {
-      if (data === null) {
-        console.log('No results for suggestions');
+        input: searchTerm,
+        componentRestrictions: {country: 'uk'},
+        types: [types]
+      }, function (newData) {
+        if (newData === null) {
+          console.log('No results for suggestions');
+        }
+        console.log(newData.map(function (item) {
+          return item.description;
+        }));
+        data = newData;
       }
-      console.log(data.map(function (item) {
-        return item.description;
-      }));
-    });
-
+    );
+    return data;
   }
 
 
