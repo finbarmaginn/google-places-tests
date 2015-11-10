@@ -93,6 +93,7 @@ function init() {
   setUpTextInputs();
 
 
+  document.getElementById('hide').style.display = "none"
 }
 /**
  * Gets results array

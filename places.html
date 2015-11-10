@@ -27,30 +27,33 @@
 <input id="pac-input" class="controls" type="text"
        placeholder="Enter a location">
 
-<h2>Using Autocomplete input regions</h2>
-<input id="pac-input2" class="controls" type="text"
-       placeholder="Enter a location">
+<div id="hide">
+
+  <h2>Using Autocomplete input regions</h2>
+  <input id="pac-input2" class="controls" type="text"
+         placeholder="Enter a location">
 
 
-<h2>Using Autocomplete service</h2>
+  <h2>Using Autocomplete service</h2>
 
-<p>Use Regions?</p>
-<form action="">
-  <input type="radio" name="useRegions" value="noRegions" checked="checked">No
-  <input type="radio" name="useRegions" value="regions">Yes
-  <!-- <input type="radio" name="useRegions" value="merged">Merge both-->
-</form>
+  <p>Use Regions?</p>
+  <form action="">
+    <input type="radio" name="useRegions" value="noRegions" checked="checked">No
+    <input type="radio" name="useRegions" value="regions">Yes
+    <!-- <input type="radio" name="useRegions" value="merged">Merge both-->
+  </form>
 
-<h4>getPlacePredictions api method, (some as postcode check)</h4>
-<input id="svc-input" class="controls" type="text"
-       placeholder="Enter a location">
-<div id="output"></div>
+  <h4>getPlacePredictions api method, (some as postcode check)</h4>
+  <input id="svc-input" class="controls" type="text"
+         placeholder="Enter a location">
+  <div id="output"></div>
 
-<h4>getPredictions api method, (some as postcode check)</h4>
-<input id="svc-input-getPredictions" class="controls" type="text"
-       placeholder="Enter a location">
+  <h4>getPredictions api method, (some as postcode check)</h4>
+  <input id="svc-input-getPredictions" class="controls" type="text"
+         placeholder="Enter a location">
 
-<div id="output2"></div>
+  <div id="output2"></div>
+</div>
 
 <script type="text/javascript" src="main.js"></script>
 <script src="https://maps.googleapis.com/maps/api/js?signed_in=true&libraries=places&callback=init"
