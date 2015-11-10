@@ -129,7 +129,7 @@ function getAutocompleteService_GetPredictions(searchTerm) {
 
 
       //set the page for viewing the data from google
-      document.getElementById("output").innerHTML = '<pre>' + output + '</pre>';
+      document.getElementById("output2").innerHTML = '<pre>' + output + '</pre>';
 
     }
   );
